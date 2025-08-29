@@ -330,7 +330,7 @@ def generate_enhanced_response(prompt: str, model: str, api_key: str) -> dict:
             response = client.chat.completions.create(
                 model=model,
                 messages=messages,
-                temperature=0.3,
+                temperature=1,
                 max_completion_tokens=800
             )
             content = response.choices[0].message.content
@@ -345,7 +345,7 @@ def generate_enhanced_response(prompt: str, model: str, api_key: str) -> dict:
                 response = client.responses.create(
                     model=model,
                     prompt=full_prompt,
-                    temperature=0.3,
+                    temperature=1,
                     max_tokens=1500
                 )
                 content = response.choices[0].text
@@ -354,7 +354,7 @@ def generate_enhanced_response(prompt: str, model: str, api_key: str) -> dict:
                 response = client.completions.create(
                     model=model,
                     prompt=full_prompt,
-                    temperature=0.3,
+                    temperature=1,
                     max_tokens=1500
                 )
                 content = response.choices[0].text                
@@ -366,11 +366,10 @@ def generate_enhanced_response(prompt: str, model: str, api_key: str) -> dict:
                 {"role": "user", "content": prompt}
             ]
             # Set temperature to 1 for gpt-5-nano, keep 0.3 for others
-            temp = 1.0 if model == "gpt-5-nano" else 0.3
             response = client.chat.completions.create(
                 model=model,
                 messages=messages,
-                temperature=temp,
+                temperature=1,
                 max_completion_tokens=800
             )
             content = response.choices[0].message.content
