@@ -346,7 +346,7 @@ def generate_enhanced_response(prompt: str, model: str, api_key: str) -> dict:
                     model=model,
                     prompt=full_prompt,
                     temperature=0.3,
-                    max_tokens=800
+                    max_tokens=1500
                 )
                 content = response.choices[0].text
             except AttributeError:
@@ -355,7 +355,7 @@ def generate_enhanced_response(prompt: str, model: str, api_key: str) -> dict:
                     model=model,
                     prompt=full_prompt,
                     temperature=0.3,
-                    max_tokens=800
+                    max_tokens=1500
                 )
                 content = response.choices[0].text                
                 
@@ -373,7 +373,7 @@ def generate_enhanced_response(prompt: str, model: str, api_key: str) -> dict:
                 temperature=temp,
                 max_completion_tokens=800
             )
-            content = response.choices[0].text
+            content = response.choices[0].message.content
         
         # Create sources list - enhanced to handle both datasets and PDFs
         sources = []
