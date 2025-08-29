@@ -373,7 +373,7 @@ def generate_enhanced_response(prompt: str, model: str, api_key: str) -> dict:
                 temperature=temp,
                 max_completion_tokens=800
             )
-            content = response.choices[0].message.content
+            content = response.choices[0].message
         
         # Create sources list - enhanced to handle both datasets and PDFs
         sources = []
