@@ -53,7 +53,7 @@ def initialize_session_state():
         'uploaded_pdfs': {},
         'system_initialized': False,
         'rag_system': None,
-        'llm_model': 'gpt-4.1-nano',
+        'llm_model': 'gpt-5-nano',
         # Removed all authentication-related session state variables
     }
     
@@ -158,7 +158,7 @@ def cosine_similarity(vec1, vec2):
     return dot / (norm1 * norm2) if norm1 and norm2 else 0.0
 
 
-def get_relevant_sources(prompt: str, api_key: str, top_k: int = 2):
+def get_relevant_sources(prompt: str, api_key: str, top_k: int = 10):
     """Get most relevant dataset sources and PDF content for a given prompt."""
     # Get existing dataset texts
     texts = fetch_dataset_texts()
@@ -360,15 +360,17 @@ def generate_enhanced_response(prompt: str, model: str, api_key: str) -> dict:
                 content = response.choices[0].text
                 
         else:
-            # Default case: gpt-4.1-nano and other standard models
+            # Default case: gpt-5-nano and other standard models
             messages = [
                 {"role": "system", "content": context},
                 {"role": "user", "content": prompt}
             ]
+            # Set temperature to 1 for gpt-5-nano, keep 0.3 for others
+            temp = 1.0 if model == "gpt-5-nano" else 0.3
             response = client.chat.completions.create(
                 model=model,
                 messages=messages,
-                temperature=0.3,
+                temperature=temp,
                 max_tokens=800
             )
             content = response.choices[0].message.content
@@ -413,7 +415,7 @@ def generate_enhanced_response(prompt: str, model: str, api_key: str) -> dict:
 def get_model_config(model: str) -> dict:
     """Get configuration details for each model."""
     model_configs = {
-        "gpt-4.1-nano": {
+        "gpt-5-nano": {
             "supports_temperature": True,
             "token_parameter": "max_tokens",
             "endpoint": "chat/completions",
@@ -472,7 +474,7 @@ def main():
         st.subheader("🤖 Model Settings")
 
         # Model options with compatibility info
-        model_options = ["gpt-4.1-nano", "o4-mini", "o4-mini-deep-research", "gpt-4o-mini-search-preview"]
+        model_options = ["gpt-5-nano", "o4-mini", "o4-mini-deep-research", "gpt-4o-mini-search-preview"]
 
         # Create selection with descriptions
         current_model = st.session_state.llm_model
